@@ -36,9 +36,27 @@ impl Model {
     }
 
     pub fn predict(&self, query: Json<Query>) -> Result<Response, Box<dyn std::error::Error>> {
-        let result = Response {
-            message: "2".to_string(),
+        let tensor: Tensor =
+            tract_ndarray::Array1::from_shape_fn(query.data.len(), |i| query.data[i]).into();
+        let output = self.model.run(tvec!(tensor.into()));
+        let output_unwrapped = match output {
+            Ok(o) => o,
+            _ => panic!("error in running model"),
         };
-        return Ok(result);
+        let array_view_res = output_unwrapped[0].to_array_view::<f32>();
+        let best = match array_view_res {
+            Ok(av) => {
+                av.iter()
+                    .cloned()
+                    .zip(2..)
+                    .max_by(|a, b| a.0.partial_cmp(&b.0).unwrap());
+            }
+            _ => panic!("could not compute result"),
+        };
+
+        let response = Response {
+            message: "{best:?}".to_string(),
+        };
+        return Ok(response);
     }
 }
