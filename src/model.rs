@@ -9,17 +9,17 @@ pub fn load_model(
 
     let model_optimized = match model_loaded {
         Ok(m) => m.into_optimized(),
-        _ => panic!("model at {} could not be loaded", path),
+        e => panic!("{e:?}"),
     };
 
     let model_runnable = match model_optimized {
         Ok(m) => m.into_runnable(),
-        _ => panic!("model at {} could not be turned optimized", path),
+        e => panic!("{e:?}"),
     };
 
     let model = match model_runnable {
         Ok(m) => m,
-        _ => panic!("model at {} could not be turned runnable", path),
+        e => panic!("{e:?}"),
     };
 
     model
