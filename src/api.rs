@@ -12,7 +12,7 @@ use actix_web::{
 
 #[post("/infer")]
 pub async fn infer(query: Json<Query>) -> HttpResponse {
-    let model = Model::new();
+    let model = Model::new("./model/model.onnx");
     let prediction = model.predict(query);
     match prediction {
         Ok(prediction) => HttpResponse::Ok().json(prediction),

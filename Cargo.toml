@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 actix-web = "4.4.0"
 serde = { version = "1.0.190", features = ["derive"] }
+tract-onnx = "0.20.20"
