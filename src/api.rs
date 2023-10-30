@@ -20,6 +20,11 @@ pub async fn infer(query: Json<Query>) -> HttpResponse {
     }
 }
 
+#[post("/mirror")]
+pub async fn mirror(query: Json<Query>) -> HttpResponse {
+    HttpResponse::Ok().json(query.data.clone())
+}
+
 pub fn config(cfg: &mut web::ServiceConfig) {
-    cfg.service(web::scope("/api").service(infer));
+    cfg.service(web::scope("/api").service(infer).service(mirror));
 }
