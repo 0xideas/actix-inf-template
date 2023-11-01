@@ -20,7 +20,7 @@ model = nn.Sequential(
 print(model)
 loss_fn = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
-for n in range(100):
+for n in range(10000):
     y_pred = model(data)
     loss = loss_fn(y_pred, y)
     optimizer.zero_grad()
