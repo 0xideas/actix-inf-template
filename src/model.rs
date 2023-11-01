@@ -1,5 +1,7 @@
 use crate::io::{Query, Response};
 use actix_web::web::Json;
+use ndarray::array;
+use std::{array, convert::TryInto};
 use tract_onnx::prelude::*;
 
 pub fn load_model(
@@ -36,26 +38,43 @@ impl Model {
     }
 
     pub fn predict(&self, query: Json<Query>) -> Result<Response, Box<dyn std::error::Error>> {
-        let tensor: Tensor =
-            tract_ndarray::Array1::from_shape_fn(query.data.len(), |i| query.data[i]).into();
+        // Create an array
+        let mut array1: [f32; 3] = [0.0; 3];
+
+        // Copy elements from the vector to the array
+        for (index, element) in query.data.iter().enumerate() {
+            array1[index] = *element;
+        }
+        let array2: [[f32; 3]; 1] = [array1];
+        let tensor: Tensor = tensor2(&array2);
         let output = self.model.run(tvec!(tensor.into()));
         let output_unwrapped = match output {
             Ok(o) => o,
-            _ => panic!("error in running model"),
+            e => panic!("{e:?}"),
         };
-        let array_view_res = output_unwrapped[0].to_array_view::<f32>();
-        let best = match array_view_res {
-            Ok(av) => {
-                av.iter()
-                    .cloned()
-                    .zip(2..)
-                    .max_by(|a, b| a.0.partial_cmp(&b.0).unwrap());
-            }
+        let array_view_res: Result<
+            tract_ndarray::ArrayBase<
+                tract_ndarray::ViewRepr<&f32>,
+                tract_ndarray::Dim<tract_ndarray::IxDynImpl>,
+            >,
+            tract_onnx::tract_core::anyhow::Error,
+        > = output_unwrapped[0].to_array_view::<f32>();
+        let best_option: Option<usize> = match array_view_res {
+            Ok(av) => av
+                .iter()
+                .enumerate()
+                .max_by(|(_, a), (_, b)| a.total_cmp(b))
+                .map(|(index, _)| index),
             _ => panic!("could not compute result"),
         };
 
+        let best = match best_option {
+            Some(b) => b,
+            _ => panic!("could not extract result"),
+        };
+
         let response = Response {
-            message: "{best:?}".to_string(),
+            message: best.to_string(),
         };
         return Ok(response);
     }
