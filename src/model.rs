@@ -2,6 +2,11 @@ use crate::io::{Query, Response};
 use actix_web::web::Json;
 use tract_onnx::prelude::*;
 
+pub struct AppData {
+    pub n_model_instances: usize,
+    pub models: Vec<Model>,
+}
+
 pub fn load_model(
     path: &str,
 ) -> SimplePlan<TypedFact, Box<dyn TypedOp>, Graph<TypedFact, Box<dyn TypedOp>>> {
