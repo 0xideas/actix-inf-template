@@ -1,7 +1,5 @@
 use crate::io::{Query, Response};
 use actix_web::web::Json;
-use ndarray::array;
-use std::{array, convert::TryInto};
 use tract_onnx::prelude::*;
 
 pub fn load_model(

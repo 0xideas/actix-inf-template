@@ -1,5 +1,4 @@
 use actix_web::{get, web, App, HttpResponse, HttpServer, Responder, Result};
-use model::Model;
 
 mod api;
 mod io;

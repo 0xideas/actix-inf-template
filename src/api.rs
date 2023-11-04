@@ -1,14 +1,7 @@
-use crate::{
-    io::{Query, Response},
-    model::Model,
-};
+use crate::{io::Query, model::Model};
 
 use actix_web::web;
-use actix_web::{
-    post,
-    web::{Data, Json},
-    HttpResponse,
-};
+use actix_web::{post, web::Json, HttpResponse};
 
 #[post("/infer")]
 pub async fn infer(query: Json<Query>) -> HttpResponse {
