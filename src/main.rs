@@ -23,7 +23,7 @@ async fn not_found() -> Result<HttpResponse> {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let n_models: usize = 10;
+    let n_models: usize = 1;
     let models: Vec<Model> = (1..(n_models + 1))
         .into_iter()
         .map(|_x| Model::new("./model/model.onnx"))
