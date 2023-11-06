@@ -3,8 +3,7 @@ use actix_web::web::Json;
 use tract_onnx::prelude::*;
 
 pub struct AppData {
-    pub n_model_instances: usize,
-    pub models: Vec<Model>,
+    pub model: Model,
 }
 
 pub fn load_model(

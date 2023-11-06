@@ -5,14 +5,12 @@ use crate::{
 use actix_web::web;
 use actix_web::web::Data;
 use actix_web::{post, web::Json, HttpResponse};
-use rand::Rng;
 use std::sync::Mutex;
 
 #[post("/infer")]
 pub async fn infer(query: Json<Query>, data: Data<Mutex<AppData>>) -> HttpResponse {
     let app_data = data.lock().unwrap();
-    let model_index: usize = rand::thread_rng().gen_range(0..app_data.n_model_instances);
-    let model: &Model = &app_data.models[model_index];
+    let model: &Model = &app_data.model;
 
     let prediction = model.predict(query);
     match prediction {
