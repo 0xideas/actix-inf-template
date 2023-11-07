@@ -11,8 +11,8 @@ use ort::{
     Session, SessionBuilder, Value,
 };
 
-pub struct AppSession {
-    pub session: AISession,
+pub struct AppData {
+    pub model: Model,
 }
 
 fn load_ai_session(path: &str) -> Session {
@@ -37,14 +37,14 @@ fn load_ai_session(path: &str) -> Session {
     return (session2);
 }
 
-pub struct AISession {
-    session: Session,
+pub struct Model {
+    model: Session,
 }
 
-impl AISession {
+impl Model {
     pub fn new(path: &str) -> Self {
         let session = load_ai_session(&path);
-        AISession { session: session }
+        Model { model: session }
     }
     pub fn predict(&self, query: Json<Query>) -> Result<Response, Box<dyn std::error::Error>> {
         let mut array1 = ArrayD::<f32>::zeros(IxDyn(&[1, 3]));
@@ -54,8 +54,8 @@ impl AISession {
         }
         let mut array2 = CowArray::from(array1);
 
-        let input_values = vec![Value::from_array(self.session.allocator(), &array2)?];
-        let output_res: Result<Vec<Value>, OrtError> = self.session.run(input_values);
+        let input_values = vec![Value::from_array(self.model.allocator(), &array2)?];
+        let output_res: Result<Vec<Value>, OrtError> = self.model.run(input_values);
         let outputs = match output_res {
             Ok(o) => o,
             e => panic!("{e:?}"),

@@ -5,8 +5,8 @@ mod session;
 
 use actix_web::web::Data;
 use actix_web::{get, web, App, HttpResponse, HttpServer, Responder, Result};
-use model::{AppData, Model};
-use session::{AISession, AppSession};
+// use model::{AppData, Model};
+use session::{AppData, Model};
 use std::sync::Mutex;
 
 #[get("/health")]
@@ -28,12 +28,11 @@ async fn not_found() -> Result<HttpResponse> {
 async fn main() -> std::io::Result<()> {
     std::env::set_var("RUST_LOG", "debug");
     env_logger::init();
-    //let model = Model::new("./model/model.onnx");
-    let session = AISession::new("./model/model.onnx");
+    let model = Model::new("./model/model.onnx");
 
     // let app_data = AppData { model: model };
 
-    let app_session = AppSession { session: session };
+    let app_session = AppData { model: model };
     let data = Data::new(Mutex::new(app_session));
 
     HttpServer::new(move || {
