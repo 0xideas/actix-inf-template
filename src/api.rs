@@ -1,6 +1,7 @@
 use crate::{
     io::Query,
-    model::{AppData, Model},
+    tract_model::{AppData, Model},
+    //ort_model::{AppData, Model},
 };
 use actix_web::web;
 use actix_web::web::Data;
@@ -9,7 +10,7 @@ use std::sync::Mutex;
 
 #[post("/infer")]
 pub async fn infer(query: Json<Query>, data: Data<Mutex<AppData>>) -> HttpResponse {
-    let app_data = data.lock().unwrap();
+    let app_data: std::sync::MutexGuard<'_, AppData> = data.lock().unwrap();
     let model: &Model = &app_data.model;
 
     let prediction = model.predict(query);
