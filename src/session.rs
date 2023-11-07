@@ -47,8 +47,9 @@ impl AISession {
         AISession { session: session }
     }
     pub fn predict(&self, query: Json<Query>) -> Result<Response, Box<dyn std::error::Error>> {
-        let mut array1 = ArrayD::<f32>::zeros(IxDyn(&[3]));
-        for (index, element) in query.data.iter().enumerate() {
+        let mut array1 = ArrayD::<f32>::zeros(IxDyn(&[1, 3]));
+        for (i, element) in query.data.iter().enumerate() {
+            let index = IxDyn(&[0, i]);
             array1[index] = *element;
         }
         let mut array2 = CowArray::from(array1);
