@@ -5,8 +5,8 @@ mod tract_model;
 
 use actix_web::web::Data;
 use actix_web::{get, web, App, HttpResponse, HttpServer, Responder, Result};
-use tract_model::{AppData, Model};
-//use ort_model::{AppData, Model};
+//use tract_model::{AppData, Model};
+use ort_model::{AppData, Model};
 use std::sync::Mutex;
 
 #[get("/health")]
