@@ -9,13 +9,14 @@ y = (data.sum(1) / 2).astype(int)
 y = y - np.min(y)
 print(sorted(np.unique(y)))
 
-black_op = ["ZipMap"]
+#black_op = ["ZipMap"]
+black_op = []
 clf = DecisionTreeClassifier()
 clf.fit(data, y)
 onx = to_onnx(clf, data[:1, :], target_opset=12, black_op=black_op)
 
 
-with open("model/model.onnx", "wb") as f:
+with open("model/model_sklearn.onnx", "wb") as f:
     f.write(onx.SerializeToString())
 
 os.system(
