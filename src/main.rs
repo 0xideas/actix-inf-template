@@ -1,12 +1,12 @@
 mod api;
 mod io;
-mod model;
-mod session;
+mod ort_model;
+mod tract_model;
 
 use actix_web::web::Data;
 use actix_web::{get, web, App, HttpResponse, HttpServer, Responder, Result};
-// use model::{AppData, Model};
-use session::{AppData, Model};
+use tract_model::{AppData, Model};
+//use ort_model::{AppData, Model};
 use std::sync::Mutex;
 
 #[get("/health")]
