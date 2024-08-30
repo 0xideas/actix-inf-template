@@ -1,6 +1,7 @@
 use crate::io::{Query, Response};
 use actix_web::web::Json;
 use tract_onnx::prelude::*;
+use anyhow;
 
 pub struct AppData {
     pub model: Model,
@@ -59,7 +60,7 @@ impl Model {
                 tract_ndarray::ViewRepr<&f32>,
                 tract_ndarray::Dim<tract_ndarray::IxDynImpl>,
             >,
-            tract_onnx::tract_core::anyhow::Error,
+            anyhow::Error,
         > = output_unwrapped[0].to_array_view::<f32>();
         let best_option: Option<usize> = match array_view_res {
             Ok(av) => av

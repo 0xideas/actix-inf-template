@@ -34,7 +34,7 @@ fn load_ai_session(path: &str) -> Session {
         Ok(sess) => sess,
         e => panic!("{e:?}"),
     };
-    return (session2);
+    return session2;
 }
 
 pub struct Model {
@@ -52,7 +52,7 @@ impl Model {
             let index = IxDyn(&[0, i]);
             array1[index] = *element;
         }
-        let mut array2 = CowArray::from(array1);
+        let array2 = CowArray::from(array1);
 
         let input_values = vec![Value::from_array(self.model.allocator(), &array2)?];
         let output_res: Result<Vec<Value>, OrtError> = self.model.run(input_values);

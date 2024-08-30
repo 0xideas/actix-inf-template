@@ -14,3 +14,6 @@ model/
 
 .metals/
 .vscode/
+.env
+.env.sh
+.aider*
