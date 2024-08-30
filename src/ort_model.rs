@@ -1,13 +1,11 @@
-use std::{env, f32::consts::E};
-
 use crate::io::{Query, Response};
 use actix_web::web::Json;
 use ndarray::ArrayD;
 use ndarray::IxDyn;
 
-use ndarray::{array, concatenate, s, Array1, Axis, CowArray};
+use ndarray::CowArray;
 use ort::{
-    tensor::OrtOwnedTensor, Environment, ExecutionProvider, GraphOptimizationLevel, OrtError,
+    tensor::OrtOwnedTensor, Environment, ExecutionProvider, OrtError,
     Session, SessionBuilder, Value,
 };
 
